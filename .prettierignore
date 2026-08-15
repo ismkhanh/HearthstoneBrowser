@@ -1,0 +1,8 @@
+# native folders: committed source, but nothing Prettier should format
+android/
+ios/
+
+# generated / output
+coverage/
+node_modules/
+*.lock
