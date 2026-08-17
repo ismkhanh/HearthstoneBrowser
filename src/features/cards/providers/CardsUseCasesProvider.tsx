@@ -5,7 +5,6 @@ import { createCardsUseCases, type CardsUseCases } from '../di/cardsContainer';
 const CardsUseCasesContext = createContext<CardsUseCases | null>(null);
 
 interface CardsUseCasesProviderProps extends PropsWithChildren {
-  /** Tests (and future feature flags) inject their own implementation here. */
   useCases?: CardsUseCases;
 }
 

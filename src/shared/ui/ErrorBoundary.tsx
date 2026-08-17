@@ -15,7 +15,6 @@ export class ErrorBoundary extends React.Component<PropsWithChildren, ErrorBound
   }
 
   componentDidCatch(error: Error, info: ErrorInfo): void {
-    // In production, report to Sentry / Crashlytics here.
     console.error('ErrorBoundary caught:', error, info.componentStack);
   }
 

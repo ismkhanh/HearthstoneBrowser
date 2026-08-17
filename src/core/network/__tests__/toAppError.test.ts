@@ -1,6 +1,5 @@
 import { AxiosError, AxiosHeaders, type AxiosResponse } from 'axios';
 import { z } from 'zod';
-
 import { AppError } from '../../errors/AppError';
 import { toAppError } from '../toAppError';
 
@@ -24,7 +23,7 @@ function buildZodError() {
 
 describe('toAppError', () => {
   it('returns an existing AppError untouched', () => {
-    const original = new AppError('server', 'boom', 500);
+    const original = new AppError('server', 'test error msg', 500);
 
     expect(toAppError(original)).toBe(original);
   });
@@ -40,7 +39,7 @@ describe('toAppError', () => {
     expect(toAppError(error).kind).toBe(kind);
   });
 
-  it('marks only transient failures as retryable', () => {
+  it('treats server errors as retryable and client errors as not', () => {
     expect(toAppError(buildAxiosError(503)).isRetryable).toBe(true);
     expect(toAppError(buildAxiosError(404)).isRetryable).toBe(false);
   });

@@ -1,3 +1,4 @@
+import { isAppError } from '../../../../../core/errors/AppError';
 import {
   buildCardDto,
   buildCardsResponseDto,
@@ -23,7 +24,17 @@ describe('HttpCardRepository', () => {
   it('returns mapped card details', async () => {
     const card = await createHttpCardRepository(remote).getCardBySlug('a-light-in-the-darkness');
 
-    expect(card.cardSetName).toBe('Whispers of the Old Gods');
+    expect(card.cardSetName).toBe('Whispers of the Old Man');
     expect(card.text).toBe('Discover a Paladin minion. Give it +2/+2.');
+  });
+
+  it('rejects a malformed detail payload with a validation error', async () => {
+    remote.fetchCardBySlug.mockResolvedValueOnce({ nonsense: true });
+
+    const failure = await createHttpCardRepository(remote)
+      .getCardBySlug('fireball')
+      .catch((error: unknown) => error);
+
+    expect(isAppError(failure) && failure.kind).toBe('validation');
   });
 });

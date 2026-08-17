@@ -15,7 +15,7 @@ export function buildCardDto(overrides: Partial<CardDto> = {}): CardDto {
     rarity: { slug: 'common', name: 'Common' },
     class: { slug: 'paladin', name: 'Paladin' },
     type: { slug: 'spell', name: 'Spell' },
-    cardSet: { slug: 'whispers', name: 'Whispers of the Old Gods' },
+    cardSet: { slug: 'whispers', name: 'Whispers of the Old Man' },
     keywords: [{ slug: 'discover', name: 'Discover', text: 'Choose one of three cards.' }],
     ...overrides,
   };
@@ -30,7 +30,6 @@ export function buildCardSummary(overrides: Partial<CardSummary> = {}): CardSumm
     id: 1,
     slug: 'fireball',
     name: 'Fireball',
-    manaCost: 4,
     imageUrl: 'https://images.test/fireball.png',
     rarity: 'Free',
     className: 'Mage',

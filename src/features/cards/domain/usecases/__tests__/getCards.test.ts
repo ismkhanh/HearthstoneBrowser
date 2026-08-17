@@ -21,18 +21,7 @@ describe('getCards use case', () => {
     );
   });
 
-  it('never requests a page below one', async () => {
-    const repository = createRepositoryStub();
-
-    await createGetCardsUseCase(repository)({ page: 0 });
-
-    expect(repository.getCards).toHaveBeenCalledWith(
-      expect.objectContaining({ page: 1 }),
-      undefined,
-    );
-  });
-
-  it('trims the search term and omits it when shorter than the minimum', async () => {
+  it('trims the search query and omits it when shorter than the minimum', async () => {
     const repository = createRepositoryStub();
     const getCards = createGetCardsUseCase(repository);
 

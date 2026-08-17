@@ -1,7 +1,3 @@
-/**
- * Transport-agnostic error used by every layer above the network client.
- * Nothing outside `core/network` knows that axios exists.
- */
 export type AppErrorKind =
   | 'network'
   | 'timeout'
@@ -22,7 +18,6 @@ export class AppError extends Error {
     this.status = status;
   }
 
-  /** Retrying a client error (404/401) will never succeed. */
   get isRetryable(): boolean {
     return this.kind === 'network' || this.kind === 'timeout' || this.kind === 'server';
   }

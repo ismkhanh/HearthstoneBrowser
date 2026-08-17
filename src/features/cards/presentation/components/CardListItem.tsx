@@ -1,6 +1,5 @@
 import React, { memo, useCallback } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import FastImage from '@d11/react-native-fast-image';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { theme } from '../../../../shared/theme/theme';
 import type { CardSummary } from '../../domain/entities/Card';
@@ -23,11 +22,7 @@ function CardListItemComponent({ card, onPress }: CardListItemProps) {
       style={styles.container}
     >
       {card.imageUrl ? (
-        <FastImage
-          source={{ uri: card.imageUrl }}
-          style={styles.image}
-          resizeMode={FastImage.resizeMode.cover}
-        />
+        <Image source={{ uri: card.imageUrl }} style={styles.image} resizeMode="cover" />
       ) : (
         <View style={[styles.image, styles.imageFallback]} />
       )}

@@ -9,9 +9,7 @@ const EnvSchema = z.object({
 });
 
 /**
- * Validated at startup so a missing key fails fast here, not as a
- * confusing 401 later. Values come from `.env` via react-native-config,
- * which bakes them in at build time — edit `.env`, then rebuild.
+ * Check at startup so a required missing key fails early here
  */
 export const env = EnvSchema.parse({
   apiBaseUrl: Config.RAPIDAPI_BASE_URL,

@@ -5,9 +5,8 @@ import { AppError } from '../errors/AppError';
 import { toAppError } from './toAppError';
 
 /**
- * Minimal contract the data layer depends on (Dependency Inversion): data
- * sources ask for a `HttpClient`, not for axios. That keeps them trivial to
- * fake in unit tests and makes swapping the transport a one-file change.
+ * This is a thin wrapper around axios.
+ * data sources ask for a `HttpClient`, not for axios. 
  */
 export interface HttpClient {
   get<TResponse>(
@@ -36,11 +35,7 @@ export function createHttpClient(): HttpClient {
   };
 }
 
-/**
- * This API reports some misses as HTTP 200 with `{ ok: false, message }` in
- * the body instead of a 404, so the envelope is checked before the payload
- * reaches any caller.
- */
+// make sure the response is not an error payload.
 function unwrap<TResponse>(body: TResponse): TResponse {
   if (body && typeof body === 'object' && (body as { ok?: unknown }).ok === false) {
     const { message } = body as { message?: string };

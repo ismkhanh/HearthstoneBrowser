@@ -1,9 +1,7 @@
 import { z } from 'zod';
 
 /**
- * Wire format returned by RapidAPI, validated at runtime with zod.
- * Only the fields the app consumes are declared; everything else in
- * the (very large) payload is ignored.
+ * Only the fields the app consumes are declared, everything else is ignored.
  */
 const NamedRefDtoSchema = z.object({
   slug: z.string().optional(),

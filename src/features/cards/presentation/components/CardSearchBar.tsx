@@ -14,7 +14,6 @@ import { theme } from '../../../../shared/theme/theme';
 interface CardSearchBarProps {
   value: string;
   onChange: (value: string) => void;
-  /** True while a search request for the current term is in flight. */
   isLoading?: boolean;
 }
 
@@ -86,7 +85,6 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     fontSize: theme.fontSize.body,
     paddingHorizontal: theme.spacing.lg,
-    // Keeps typed text clear of the loading / clear accessory.
     paddingRight: theme.spacing.xl + theme.spacing.lg,
     paddingVertical: theme.spacing.md,
   },

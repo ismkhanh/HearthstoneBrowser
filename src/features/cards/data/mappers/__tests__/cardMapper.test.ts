@@ -9,7 +9,6 @@ describe('cardMapper', () => {
       id: 38913,
       slug: 'a-light-in-the-darkness',
       name: 'A Light in the Darkness',
-      manaCost: 2,
       imageUrl: 'https://images.test/crop.png',
       rarity: 'Common',
       className: 'Paladin',
@@ -18,20 +17,19 @@ describe('cardMapper', () => {
   });
 
   it('falls back to safe defaults when optional fields are missing', () => {
-    const summary = toCardSummary(
-      buildCardDto({
-        manaCost: null,
-        cropImage: '',
-        image: '',
-        rarity: null,
-        class: null,
-        type: null,
-      }),
-    );
+    const dto = buildCardDto({
+      manaCost: null,
+      cropImage: '',
+      image: '',
+      rarity: null,
+      class: null,
+      type: null,
+    });
+    const summary = toCardSummary(dto);
 
-    expect(summary.manaCost).toBe(0);
     expect(summary.imageUrl).toBeNull();
     expect(summary.rarity).toBeNull();
+    expect(toCardDetails(dto).manaCost).toBeNull();
   });
 
   it('strips inline markup from card texts and keywords', () => {
@@ -53,5 +51,13 @@ describe('cardMapper', () => {
 
     expect(page.page).toBe(3);
     expect(page.cards).toEqual([]);
+  });
+
+  it('drops an invalid card without discarding the rest of the page', () => {
+    const invalidCard = { nonsense: true } as unknown as ReturnType<typeof buildCardDto>;
+    const page = toCardsPage(buildCardsResponseDto({ cards: [buildCardDto(), invalidCard] }), 1);
+
+    expect(page.cards).toHaveLength(1);
+    expect(page.cards[0]?.slug).toBe('a-light-in-the-darkness');
   });
 });

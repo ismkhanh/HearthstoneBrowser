@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-/** Keeps the server-side search from firing on every keystroke. */
-export function useDebouncedValue<T>(value: T, delayMs = 400): T {
+// avoids search api from firing on every keystroke
+export function useDebouncedValue<T>(value: T, delayMs = 500): T {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {

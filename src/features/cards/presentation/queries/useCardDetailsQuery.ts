@@ -11,9 +11,6 @@ export function useCardDetailsQuery(slug: string) {
     queryKey: cardQueryKeys.detail(slug),
     queryFn: ({ signal }) => getCardBySlug(slug, signal),
     enabled: slug.length > 0,
-    // Deliberately not seeded with placeholder data from the list cache: the
-    // list only carries the wide crop image, which painted letterboxed before
-    // the real card art arrived. The header already shows the name via route
-    // params, so a brief spinner reads better than a half-filled layout.
+    // todo: make use of list cache as placeholder optimally and without hampering ux, right now the transition is not clean
   });
 }

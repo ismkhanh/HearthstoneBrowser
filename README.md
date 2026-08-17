@@ -1,97 +1,105 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# HearthstoneBrowser
 
-# Getting Started
+A bare React Native CLI app that fetches Hearthstone cards from the [hearthstone11 RapidAPI](https://rapidapi.com/), lets you search them by name, and shows full card details on click.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## App structure
 
-## Step 1: Start Metro
-
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
-
-To start the Metro dev server, run the following command from the root of your React Native project:
-
-```sh
-# Using npm
-npm start
-
-# OR using Yarn
-yarn start
+```
+src/
+├── app/                        
+├── core/                       
+│   ├── config/                 
+│   ├── errors/                 
+│   └── network/                
+├── features/
+│   └── cards/
+│       ├── domain/     
+│       ├── data/              
+│       ├── di/           
+│       ├── providers/          
+│       └── presentation/       
+├── shared/                     
+└── test/                       
 ```
 
-## Step 2: Build and run your app
+The codebase is **feature-based, with Clean Architecture inside each feature**: every feature (currently `cards`) owns its own `domain` (entities and use cases, pure TypeScript), `data` (DTO schemas, mappers, repository implementation), and `presentation` (screens, components, query hooks) slices, while `core` and `shared` hold feature-agnostic infrastructure and UI.
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+## Versions and libraries
 
-### Android
+Built against **React Native 0.86.2** (React 19.2.3, New Architecture). Node ≥ 22.11 is required.
+
+| Library | Why |
+| --- | --- |
+| `@tanstack/react-query` | Server state: caching per search term, infinite scroll pagination |
+| `axios` | Hidden behind the `HttpClient` interface |
+| `zod` | Runtime validation |
+| `@shopify/flash-list` | For showing list of cards |
+| `@react-navigation/native-stack` | Navigation between list and details |
+| `react-native-safe-area-context` | Edge-to-edge safe area insets |
+
+Testing and quality: Jest, React Native Testing Library, ESLint (with the import-boundary rules above and the TanStack Query plugin), Prettier.
+
+## Search: server-side vs. client-side
+
+Search is implemented **server-side**. While exploring the API I found it accepts a `search` query parameter on `/cards`, so the app forwards the (debounced) search query to the server.
+
+The alternative, filtering the already-fetched pages locally would be wrong from a product pov. The list is paginated, so a local filter can only ever search the records the user happens to have scrolled through, silently missing every card not yet fetched. As a user, searching should mean searching all the cards.
+
+Details around it: input is debounced so the API isn't hit per keystroke, search query shorter than 3 characters are ignored, and each search query gets its own React Query cache key so previously fetched results come back instantly.
+
+## Future improvements
+
+- **Offline support** — skipped since it was not in the requirements. Could be added with the official `@tanstack/react-query-persist-client` (plus an MMKV/AsyncStorage persister) to persist the React Query cache, so previously seen cards survive a cold start without a connection.
+- **Logger** — a small logging abstraction with a crash-reporting sink (Sentry / Crashlytics), the ErrorBoundary currently only reports through `console.error`.
+- **Translations** — all copy is hardcoded English; extract to an i18n layer (e.g. `i18next`).
+- **E2E tests** — Maestro or Detox flows on a simulator for the two core journeys.
+- **CI/CD** — Running `typecheck`, `lint`, and `test`.
+
+## How to run
+
+Prerequisites: [React Native environment](https://reactnative.dev/docs/set-up-your-environment) for your platform, Node ≥ 22.11, JDK 17 for Android, Xcode + CocoaPods for iOS.
+
+**1. Install dependencies**
 
 ```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+npm install
 ```
 
-### iOS
+**2. Configure the API key**
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+```sh
+cp .env.example .env
+```
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+Set `RAPIDAPI_KEY` in `.env`.
+
+**3. iOS only: install pods**
 
 ```sh
 bundle install
+bundle exec pod install --project-directory=ios
 ```
 
-Then, and every time you update your native dependencies, run:
+**4. Start Metro and run**
 
 ```sh
-bundle exec pod install
+npm start
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+```sh
+npm run android
+```
 
 ```sh
-# Using npm
 npm run ios
-
-# OR using Yarn
-yarn ios
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+**Quality checks**
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+```sh
+npm run typecheck
+npm run lint
+npm test
+```
 
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+Troubleshooting: if the Android build fails during the CMake step, make sure `JAVA_HOME` points at a JDK 17 (newer JDKs break the Android Gradle Plugin).

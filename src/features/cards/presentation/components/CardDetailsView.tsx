@@ -1,13 +1,11 @@
 import React, { useMemo } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import FastImage from '@d11/react-native-fast-image';
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { theme } from '../../../../shared/theme/theme';
 import type { CardDetails } from '../../domain/entities/Card';
 
 export function CardDetailsView({ card }: { card: CardDetails }) {
-  // Android is edge-to-edge, so the scroll content ends above the system bar.
   const insets = useSafeAreaInsets();
   const contentStyle = useMemo(
     () => [styles.content, { paddingBottom: theme.spacing.lg + insets.bottom }],
@@ -17,18 +15,18 @@ export function CardDetailsView({ card }: { card: CardDetails }) {
   return (
     <ScrollView contentContainerStyle={contentStyle} testID="card-details">
       {card.imageUrl ? (
-        <FastImage
+        <Image
           accessibilityLabel={`${card.name} artwork`}
           source={{ uri: card.imageUrl }}
           style={styles.image}
-          resizeMode={FastImage.resizeMode.contain}
+          resizeMode="contain"
         />
       ) : null}
 
       <Text style={styles.name}>{card.name}</Text>
 
-      <View style={styles.attributes}>
-        <Attribute label="Mana" value={String(card.manaCost)} />
+      <View style={styles.statsRow}>
+        <Attribute label="Mana" value={formatNumber(card.manaCost)} />
         <Attribute label="Attack" value={formatNumber(card.attack)} />
         <Attribute label="Health" value={formatNumber(card.health)} />
       </View>
@@ -41,6 +39,7 @@ export function CardDetailsView({ card }: { card: CardDetails }) {
       <Attribute label="Text" value={card.text} />
       <Attribute label="Flavor" value={card.flavorText} />
 
+      {/* todo: check if list is required for keywords, i am assuming it is small, so not required */}
       {card.keywords.length > 0 ? (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Keywords</Text>
@@ -87,7 +86,7 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSize.heading,
     fontWeight: '700',
   },
-  attributes: {
+  statsRow: {
     flexDirection: 'row',
     gap: theme.spacing.xl,
   },

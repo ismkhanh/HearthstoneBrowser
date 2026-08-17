@@ -3,7 +3,7 @@ import { ZodError } from 'zod';
 
 import { AppError } from '../errors/AppError';
 
-/** Translates an unknown thrown value into the app's error vocabulary. */
+// map error to AppError
 export function toAppError(error: unknown): AppError {
   if (error instanceof AppError) {
     return error;

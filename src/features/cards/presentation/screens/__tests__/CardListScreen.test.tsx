@@ -86,6 +86,8 @@ describe('CardListScreen', () => {
     });
 
     await screen.findByText('Fireball');
+
+    await fireEvent.changeText(screen.getByTestId('card-search-input'), 'fir');
     await fireEvent.changeText(screen.getByTestId('card-search-input'), 'fire');
 
     await waitFor(() =>
@@ -93,6 +95,10 @@ describe('CardListScreen', () => {
         expect.objectContaining({ search: 'fire' }),
         expect.anything(),
       ),
+    );
+    expect(getCards).not.toHaveBeenCalledWith(
+      expect.objectContaining({ search: 'fir' }),
+      expect.anything(),
     );
   });
 

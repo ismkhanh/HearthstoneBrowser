@@ -1,12 +1,10 @@
 /**
- * Domain entities: the shape the UI is allowed to know about.
- * They are intentionally flatter and smaller than the API payload.
+ * Domain entities
  */
 export interface CardSummary {
   readonly id: number;
   readonly slug: string;
   readonly name: string;
-  readonly manaCost: number;
   readonly imageUrl: string | null;
   readonly rarity: string | null;
   readonly className: string | null;
@@ -19,6 +17,7 @@ export interface CardKeyword {
 }
 
 export interface CardDetails extends CardSummary {
+  readonly manaCost: number | null;
   readonly text: string | null;
   readonly flavorText: string | null;
   readonly artistName: string | null;

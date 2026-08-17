@@ -9,9 +9,7 @@ import { cardQueryKeys } from './cardQueryKeys';
 export function useCardsQuery(search: string) {
   const { getCards } = useCardsUseCases();
 
-  // The use case ignores terms shorter than the minimum, so the cache key
-  // ignores them too — typing "f" or "fi" keeps showing the unfiltered list
-  // instead of refetching it under a new key.
+  // The use case ignores search query shorter than the minimum, so the cache key ignores them too,
   const trimmedSearch = search.trim();
   const effectiveSearch = trimmedSearch.length >= MIN_SEARCH_LENGTH ? trimmedSearch : '';
 
@@ -30,8 +28,6 @@ export function useCardsQuery(search: string) {
     [query.data],
   );
 
-  // Explicit fields (not a spread): the query result is a tracked proxy, so
-  // subscribing to only what the screen consumes avoids extra re-renders.
   return {
     cards,
     error: query.error,
@@ -41,7 +37,6 @@ export function useCardsQuery(search: string) {
     hasNextPage: query.hasNextPage,
     fetchNextPage: query.fetchNextPage,
     refetch: query.refetch,
-    /** True while results for a changed search term are still on the way. */
     isPlaceholderData: query.isPlaceholderData,
   };
 }

@@ -3,7 +3,6 @@ import type { CardRepository, GetCardsParams } from '../repositories/CardReposit
 
 export const DEFAULT_PAGE_SIZE = 20;
 
-/** Single-character searches match almost everything, so we wait for a real term. */
 export const MIN_SEARCH_LENGTH = 3;
 
 export type GetCardsUseCase = (
@@ -11,7 +10,7 @@ export type GetCardsUseCase = (
   signal?: AbortSignal,
 ) => Promise<CardsPage>;
 
-/** Owns the listing defaults: 1-based pages and a trimmed, optional search term. */
+// by default fetches the cards list with a page size of 20, if search query present searches for cards using the query
 export function createGetCardsUseCase(repository: CardRepository): GetCardsUseCase {
   return (params, signal) => {
     const search = params.search?.trim() ?? '';

@@ -3,23 +3,6 @@ PODS:
   - hermes-engine (250829098.0.16):
     - hermes-engine/Pre-built (= 250829098.0.16)
   - hermes-engine/Pre-built (250829098.0.16)
-  - libavif/core (0.11.1)
-  - libavif/libdav1d (0.11.1):
-    - libavif/core
-    - libdav1d (>= 0.6.0)
-  - libdav1d (1.2.0)
-  - libwebp (1.6.0):
-    - libwebp/demux (= 1.6.0)
-    - libwebp/mux (= 1.6.0)
-    - libwebp/sharpyuv (= 1.6.0)
-    - libwebp/webp (= 1.6.0)
-  - libwebp/demux (1.6.0):
-    - libwebp/webp
-  - libwebp/mux (1.6.0):
-    - libwebp/demux
-  - libwebp/sharpyuv (1.6.0)
-  - libwebp/webp (1.6.0):
-    - libwebp/sharpyuv
   - RCTDeprecation (0.86.2)
   - RCTRequired (0.86.2)
   - RCTSwiftUI (0.86.2)
@@ -1933,34 +1916,6 @@ PODS:
     - React-utils (= 0.86.2)
     - ReactNativeDependencies
   - ReactNativeDependencies (0.86.2)
-  - RNFastImage (8.13.0):
-    - hermes-engine
-    - libavif/core (~> 0.11.1)
-    - libavif/libdav1d (~> 0.11.1)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-Core-prebuilt
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - ReactNativeDependencies
-    - SDWebImage (>= 5.19.1)
-    - SDWebImageAVIFCoder (~> 0.11.0)
-    - SDWebImageSVGCoder (~> 1.7.0)
-    - SDWebImageWebPCoder (~> 0.14)
-    - Yoga
   - RNScreens (4.27.0):
     - hermes-engine
     - RCTRequired
@@ -2008,17 +1963,6 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - SDWebImage (5.21.7):
-    - SDWebImage/Core (= 5.21.7)
-  - SDWebImage/Core (5.21.7)
-  - SDWebImageAVIFCoder (0.11.1):
-    - libavif/core (>= 0.11.0)
-    - SDWebImage (~> 5.10)
-  - SDWebImageSVGCoder (1.7.0):
-    - SDWebImage/Core (~> 5.6)
-  - SDWebImageWebPCoder (0.15.0):
-    - libwebp (~> 1.0)
-    - SDWebImage/Core (~> 5.17)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -2099,19 +2043,8 @@ DEPENDENCIES:
   - ReactCodegen (from `build/generated/ios/ReactCodegen`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeDependencies (from `../node_modules/react-native/third-party-podspecs/ReactNativeDependencies.podspec`)
-  - "RNFastImage (from `../node_modules/@d11/react-native-fast-image`)"
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
-
-SPEC REPOS:
-  trunk:
-    - libavif
-    - libdav1d
-    - libwebp
-    - SDWebImage
-    - SDWebImageAVIFCoder
-    - SDWebImageSVGCoder
-    - SDWebImageWebPCoder
 
 EXTERNAL SOURCES:
   FBLazyVector:
@@ -2267,8 +2200,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeDependencies:
     :podspec: "../node_modules/react-native/third-party-podspecs/ReactNativeDependencies.podspec"
-  RNFastImage:
-    :path: "../node_modules/@d11/react-native-fast-image"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   Yoga:
@@ -2277,9 +2208,6 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   FBLazyVector: 3c3be9a019176b5699455f7f66c5444b78a411c6
   hermes-engine: c652e51abba1cf1f7175cda695adbe29a8a17f89
-  libavif: 84bbb62fb232c3018d6f1bab79beea87e35de7b7
-  libdav1d: 23581a4d8ec811ff171ed5e2e05cd27bad64c39f
-  libwebp: af5937a13536ef73f3784d69cc342b98961acf33
   RCTDeprecation: bccb6545c26db881ecddfd83a3f9ea82aba1605f
   RCTRequired: b2f74764d596fc0051f00fee94b49bf41a6f7f5a
   RCTSwiftUI: c6d6a31b849b9dfa64c33b55dc91ac15dd55774c
@@ -2354,14 +2282,9 @@ SPEC CHECKSUMS:
   ReactCodegen: 3bbb7de19774794a7428ef623a7b777106cf3737
   ReactCommon: 9002f006f571256348994183f7d4387aa7cf84e8
   ReactNativeDependencies: 2bd6854ade79bf1b60586d1ab7813a389df1b6bf
-  RNFastImage: 5fafd2e70056cf7729b1bdcd558a7f0fea2aff0e
   RNScreens: de068bbd7d91b820fedac25c597d4b14830de74b
-  SDWebImage: e9fc87c1aab89a8ab1bbd74eba378c6f53be8abf
-  SDWebImageAVIFCoder: afe194a084e851f70228e4be35ef651df0fc5c57
-  SDWebImageSVGCoder: 15a300a97ec1c8ac958f009c02220ac0402e936c
-  SDWebImageWebPCoder: 0e06e365080397465cc73a7a9b472d8a3bd0f377
   Yoga: 9891cfb1c680f64de9c41b09e7453dea33454d2b
 
 PODFILE CHECKSUM: e95c6c7e0249edcec88c03d9e2fb9a9d9adb67a3
 
-COCOAPODS: 1.16.2
+COCOAPODS: 1.15.2

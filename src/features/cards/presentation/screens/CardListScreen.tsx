@@ -2,7 +2,6 @@ import { FlashList } from '@shopify/flash-list';
 import React, { useCallback, useMemo, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
 import { useDebouncedValue } from '../../../../shared/hooks/useDebouncedValue';
 import { theme } from '../../../../shared/theme/theme';
 import { EmptyState, ErrorState, LoadingState } from '../../../../shared/ui/StateViews';
@@ -17,10 +16,8 @@ interface CardListScreenProps {
 }
 
 export function CardListScreen({ onSelectCard }: CardListScreenProps) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const debouncedSearchTerm = useDebouncedValue(searchTerm);
-  // Android is edge-to-edge: the list scrolls behind the transparent system
-  // bar, so its content needs the bottom inset to end clear of it.
+  const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebouncedValue(searchQuery);
   const insets = useSafeAreaInsets();
   const listContentStyle = useMemo(() => ({ paddingBottom: insets.bottom }), [insets.bottom]);
 
@@ -34,13 +31,11 @@ export function CardListScreen({ onSelectCard }: CardListScreenProps) {
     fetchNextPage,
     refetch,
     isPlaceholderData,
-  } = useCardsQuery(debouncedSearchTerm);
+  } = useCardsQuery(debouncedSearchQuery);
 
-  // Loading from the searcher's point of view: a long-enough term whose
-  // results are not on screen yet (debounce still pending, or fetch running).
   const isSearchLoading =
-    searchTerm.trim().length >= MIN_SEARCH_LENGTH &&
-    (searchTerm !== debouncedSearchTerm || isPlaceholderData);
+    searchQuery.trim().length >= MIN_SEARCH_LENGTH &&
+    (searchQuery !== debouncedSearchQuery || isPlaceholderData);
 
   const handleEndReached = useCallback(() => {
     if (hasNextPage && !isFetchingNextPage) {
@@ -55,7 +50,7 @@ export function CardListScreen({ onSelectCard }: CardListScreenProps) {
 
   return (
     <View style={styles.container}>
-      <CardSearchBar value={searchTerm} onChange={setSearchTerm} isLoading={isSearchLoading} />
+      <CardSearchBar value={searchQuery} onChange={setSearchQuery} isLoading={isSearchLoading} />
       <View style={styles.listContainer}>{renderContent()}</View>
     </View>
   );
@@ -73,7 +68,7 @@ export function CardListScreen({ onSelectCard }: CardListScreenProps) {
       return (
         <EmptyState
           message={
-            debouncedSearchTerm ? 'No cards match your search.' : 'No cards available right now.'
+            debouncedSearchQuery ? 'No cards match your search.' : 'No cards available right now.'
           }
         />
       );
@@ -83,8 +78,6 @@ export function CardListScreen({ onSelectCard }: CardListScreenProps) {
       <FlashList
         testID="card-list"
         data={cards}
-        // Slugs repeat within a page (the API lists each printing separately),
-        // so the unique row identity is the numeric id, not the slug.
         keyExtractor={card => String(card.id)}
         renderItem={renderItem}
         contentContainerStyle={listContentStyle}

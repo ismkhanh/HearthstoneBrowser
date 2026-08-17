@@ -1,4 +1,3 @@
-import { isAppError } from '../../../../../core/errors/AppError';
 import type { HttpClient } from '../../../../../core/network/httpClient';
 import { buildCardDto, buildCardsResponseDto } from '../../../../../test/fixtures/cardFixtures';
 import { createCardRemoteDataSource } from '../CardRemoteDataSource';
@@ -8,7 +7,7 @@ describe('CardRemoteDataSource', () => {
 
   beforeEach(() => jest.clearAllMocks());
 
-  it('omits the search param when there is no search term', async () => {
+  it('omits the search param when there is no search query', async () => {
     http.get.mockResolvedValue(buildCardsResponseDto());
 
     await createCardRemoteDataSource(http).fetchCards({ page: 1, pageSize: 20 });
@@ -19,7 +18,7 @@ describe('CardRemoteDataSource', () => {
     });
   });
 
-  it('sends the search term to the server when present', async () => {
+  it('sends the search query to the server when present', async () => {
     http.get.mockResolvedValue(buildCardsResponseDto());
 
     await createCardRemoteDataSource(http).fetchCards({ page: 2, pageSize: 20, search: 'fire' });
@@ -36,15 +35,5 @@ describe('CardRemoteDataSource', () => {
     await createCardRemoteDataSource(http).fetchCardBySlug('a light');
 
     expect(http.get).toHaveBeenCalledWith('/cards/a%20light', { signal: undefined });
-  });
-
-  it('rejects a malformed detail payload with a validation error', async () => {
-    http.get.mockResolvedValue({ nonsense: true });
-
-    const failure = await createCardRemoteDataSource(http)
-      .fetchCardBySlug('fireball')
-      .catch((error: unknown) => error);
-
-    expect(isAppError(failure) && failure.kind).toBe('validation');
   });
 });

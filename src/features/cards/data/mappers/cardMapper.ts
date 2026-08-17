@@ -2,16 +2,11 @@ import { stripHtml } from '../../../../shared/utils/stripHtml';
 import type { CardDetails, CardSummary, CardsPage } from '../../domain/entities/Card';
 import { CardDtoSchema, type CardDto, type CardsResponseDto } from '../dto/CardDto';
 
-/**
- * The anti-corruption layer: the API's optional fields are normalised here so
- * the rest of the app can trust its own entities.
- */
 export function toCardSummary(dto: CardDto): CardSummary {
   return {
     id: dto.id,
     slug: dto.slug,
     name: dto.name,
-    manaCost: dto.manaCost ?? 0,
     imageUrl: nonEmpty(dto.cropImage) ?? nonEmpty(dto.image),
     rarity: dto.rarity?.name ?? null,
     className: dto.class?.name ?? null,
@@ -22,6 +17,7 @@ export function toCardSummary(dto: CardDto): CardSummary {
 export function toCardDetails(dto: CardDto): CardDetails {
   return {
     ...toCardSummary(dto),
+    manaCost: dto.manaCost ?? null,
     imageUrl: nonEmpty(dto.image) ?? nonEmpty(dto.cropImage),
     text: toPlainText(dto.text),
     flavorText: toPlainText(dto.flavorText),
