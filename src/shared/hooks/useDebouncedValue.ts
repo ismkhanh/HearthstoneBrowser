@@ -1,0 +1,13 @@
+import { useEffect, useState } from 'react';
+
+/** Keeps the server-side search from firing on every keystroke. */
+export function useDebouncedValue<T>(value: T, delayMs = 400): T {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => setDebouncedValue(value), delayMs);
+    return () => clearTimeout(timeoutId);
+  }, [value, delayMs]);
+
+  return debouncedValue;
+}
