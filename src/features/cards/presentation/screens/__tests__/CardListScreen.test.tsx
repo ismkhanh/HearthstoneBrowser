@@ -90,6 +90,27 @@ describe('CardListScreen', () => {
     );
   });
 
+  it('keeps the loaded cards when the next page fails', async () => {
+    const getCards = jest
+      .fn()
+      .mockResolvedValueOnce(buildCardsPage({ page: 1, pageCount: 2 }))
+      .mockRejectedValueOnce(new AppError('server', 'The service is unavailable right now.', 503));
+
+    await renderWithProviders(<CardListScreen onSelectCard={jest.fn()} />, {
+      useCases: createUseCases({ getCards }),
+    });
+
+    await screen.findByText('Fireball');
+    await fireEvent(screen.getByTestId('card-list'), 'onEndReached');
+
+    await waitFor(() => {
+      expect(getCards).toHaveBeenCalledTimes(2);
+      expect(screen.queryByTestId('list-footer-loading')).toBeNull();
+    });
+    expect(screen.getByText('Fireball')).toBeTruthy();
+    expect(screen.queryByTestId('error-state')).toBeNull();
+  });
+
   it('runs a debounced server-side search', async () => {
     const getCards = jest.fn().mockResolvedValue(buildCardsPage());
 

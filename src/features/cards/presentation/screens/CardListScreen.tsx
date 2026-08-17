@@ -55,7 +55,31 @@ export function CardListScreen({ onSelectCard }: CardListScreenProps) {
     </View>
   );
 
+  // show previously fetched list if next page fails
   function renderContent() {
+    if (cards.length > 0) {
+      return (
+        <FlashList
+          testID="card-list"
+          data={cards}
+          keyExtractor={card => String(card.id)}
+          renderItem={renderItem}
+          contentContainerStyle={listContentStyle}
+          onEndReached={handleEndReached}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={
+            isFetchingNextPage ? (
+              <ActivityIndicator
+                color={theme.colors.accent}
+                style={styles.footer}
+                testID="list-footer-loading"
+              />
+            ) : null
+          }
+        />
+      );
+    }
+
     if (isPending) {
       return <LoadingState label="Loading cards…" />;
     }
@@ -64,37 +88,15 @@ export function CardListScreen({ onSelectCard }: CardListScreenProps) {
       return <ErrorState error={error} onRetry={() => { refetch(); }} />;
     }
 
-    if (cards.length === 0) {
-      return (
-        <EmptyState
-          message={
-            debouncedSearchQuery ? 'No cards match your search.' : 'No cards available right now.'
-          }
-        />
-      );
-    }
-
     return (
-      <FlashList
-        testID="card-list"
-        data={cards}
-        keyExtractor={card => String(card.id)}
-        renderItem={renderItem}
-        contentContainerStyle={listContentStyle}
-        onEndReached={handleEndReached}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={
-          isFetchingNextPage ? (
-            <ActivityIndicator
-              color={theme.colors.accent}
-              style={styles.footer}
-              testID="list-footer-loading"
-            />
-          ) : null
+      <EmptyState
+        message={
+          debouncedSearchQuery ? 'No cards match your search.' : 'No cards available right now.'
         }
       />
     );
   }
+
 }
 
 const styles = StyleSheet.create({
