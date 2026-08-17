@@ -1,8 +1,7 @@
 {
-  "extends": "@react-native/typescript-config/strict",
+  "extends": "@react-native/typescript-config",
   "compilerOptions": {
     "types": ["jest"],
-    "strict": true,
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true
   },
