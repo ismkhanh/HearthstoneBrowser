@@ -107,3 +107,10 @@ npm test
 ```
 
 Troubleshooting: if the Android build fails during the CMake step, make sure `JAVA_HOME` points at a JDK 17 (newer JDKs break the Android Gradle Plugin).
+
+## Demo
+
+https://github.com/user-attachments/assets/60ad7c41-d0b4-4d59-9f2b-ad1f7d993003
+
+
+
