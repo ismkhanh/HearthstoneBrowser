@@ -47,6 +47,10 @@ The alternative, filtering the already-fetched pages locally would be wrong from
 
 Details around it: input is debounced so the API isn't hit per keystroke, search query shorter than 3 characters are ignored, and each search query gets its own React Query cache key so previously fetched results come back instantly.
 
+## Remove duplicate items from list based on slug
+
+I observed that the `/cards` endpoint returns a list of cards with same slug but with different id. But since there is only one endpoint to get the card detail via the slug name, which meant we always were taken to same card details. Hence I decided to filter out the list with same slug name so that our list contains unique items. Obviously there are different ways to handle like merging the items with same slug or creating a new end point to get details by id(assuming we have contro over the BE), for now I decided to just to filter out for simplicity.
+
 ## Future improvements
 
 - **Offline support** — skipped since it was not in the requirements. Could be added with the official `@tanstack/react-query-persist-client` (plus an MMKV/AsyncStorage persister) to persist the React Query cache, so previously seen cards survive a cold start without a connection.

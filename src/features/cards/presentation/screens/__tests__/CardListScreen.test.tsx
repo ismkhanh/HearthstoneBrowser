@@ -25,6 +25,18 @@ describe('CardListScreen', () => {
     expect(await screen.findByText('Fireball')).toBeTruthy();
   });
 
+  it('shows one row per slug when the API repeats printings', async () => {
+    const getCards = jest.fn().mockResolvedValue(
+      buildCardsPage({ cards: [buildCardSummary(), buildCardSummary({ id: 2 })] }),
+    );
+
+    await renderWithProviders(<CardListScreen onSelectCard={jest.fn()} />, {
+      useCases: createUseCases({ getCards }),
+    });
+
+    expect(await screen.findAllByText('Fireball')).toHaveLength(1);
+  });
+
   it('renders an empty state when the search returns nothing', async () => {
     const getCards = jest.fn().mockResolvedValue(buildCardsPage({ cards: [] }));
 

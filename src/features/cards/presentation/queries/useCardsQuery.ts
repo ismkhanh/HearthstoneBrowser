@@ -24,7 +24,7 @@ export function useCardsQuery(search: string) {
   });
 
   const cards = useMemo<CardSummary[]>(
-    () => query.data?.pages.flatMap(page => page.cards) ?? [],
+    () => dedupeBySlug(query.data?.pages.flatMap(page => page.cards) ?? []),
     [query.data],
   );
 
@@ -39,4 +39,18 @@ export function useCardsQuery(search: string) {
     refetch: query.refetch,
     isPlaceholderData: query.isPlaceholderData,
   };
+}
+
+// The API returns multiple items sharing one slug, and details can only
+// be fetched by slug, so duplicate rows would all open the
+// same detail screen. Keep the first card per slug.
+function dedupeBySlug(cards: readonly CardSummary[]): CardSummary[] {
+  const seen = new Set<string>();
+  return cards.filter(card => {
+    if (seen.has(card.slug)) {
+      return false;
+    }
+    seen.add(card.slug);
+    return true;
+  });
 }
